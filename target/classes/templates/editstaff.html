@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec = "http://www.thymeleaf.org/extras/spring-security"
+>
+<head>
+    <meta charset="UTF-8">
+    <title>Registration and Login System</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
+          crossorigin="anonymous">
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container-fluid">
+        <a class="navbar-brand" th:href="@{/index}">SPRING SHOP</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0 float-right">
+
+                <li class="nav-item" sec:authorize="hasAnyRole('ROLE_ADMIN', 'ADMIN')">
+                    <a class="nav-link active " aria-current="page" th:href="@{/items}">ITEMS</a>
+                </li>
+
+                <li class="nav-item" sec:authorize="isAuthenticated()">
+                    <a class="nav-link active " aria-current="page" th:href="@{/users}">USERS</a>
+                </li>
+
+                <div class="d-flex justify-content-end">
+
+                    <li class="nav-item" sec:authorize="isAuthenticated()">
+                        <a class="nav-link active" aria-current="page" th:href="@{/profile}">PROFILE</a>
+                    </li>
+
+
+                    <li class="nav-item" sec:authorize="isAuthenticated()">
+                        <a class="nav-link active" aria-current="page" th:href="@{/logout}">LOGOUT</a>
+                    </li>
+
+                </div>
+            </ul>
+
+        </div>
+    </div>
+</nav>
+<div class="container">
+    <div class="row mt-5">
+        <div class="col-6 offset-3">
+            <form method="post" >
+                th:action="@{/savestaff}"
+                <input type="hidden" name="id" th:value="${staff.id}">
+
+                <div class="form-group mt-2">
+                    <label>First name:</label>
+                    <input type="text" class="form-control" name="user_fName" th:value="${staff!=null?staff.name:''}">
+                </div>
+
+                <div class="form-group mt-2">
+                    <label>Last name:</label>
+                    <input type="text" class="form-control" name="user_lName" th:value="${staff!=null?staff.name:''}">
+                </div>
+
+                <div class="form-group mt-2">
+                    <label>Email:</label>
+                    <input type="text" class="form-control" name="user_email" th:value="${staff!=null?staff.email:''}">
+                </div>
+
+                <div class="form-group mt-2">
+                    <label>Sales amount:</label>
+                    <input type="number" class="form-control" name="sales_amount" value="0" min="0" th:value="${staff!=null?staff.salesAmount:'0'}">
+                </div>
+
+                <div class="form-group mt-2">
+                    <label>Sales cost:</label>
+                    <input type="number" class="form-control" name="sales_amount" value="0" min="0" th:value="${staff!=null?staff.salesCost:'0'}">
+                </div>
+
+
+
+                <div class="form-group mt-2">
+                    <label>ROLE:</label>
+                    <select name="category_id" class="form-control">
+                        <option th:each="cnt : ${role}" th:text ="${cnt.name}" th:value="${cnt.id}" th:selected="${staff!=null&&staff.category!=null&&staff.role.id==cnt.id}"></option>
+                    </select>
+                </div>
+
+
+                <div class="form-group mt-2">
+                    <button class="btn btn-success">SAVE STAFF</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+</div>
+</body>
+</html>
